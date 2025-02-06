@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 // Iniciar servidor después de cargar usuarios
 loadUsers()
   .then(() => {
-    server.listen(3000, '192.141.67.37', () => {
+    server.listen(3000, () => {
       console.log('Servidor en http://localhost:3000');
     });
   })
