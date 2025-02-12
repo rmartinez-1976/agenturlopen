@@ -1,15 +1,13 @@
 {
-    "name": "mi-proyecto",
-    "version": "1.0.0",
-    "description": "Servidor intermedio para integración PBX y HubSpot",
-    "main": "server.js",
-    "scripts": {
-      "start": "node server.js"
-    },
-    "dependencies": {
-      "express": "^4.18.2",
-      "socket.io": "^4.7.2",
-      "csv-parser": "^3.0.0",
-      "express-session": "^1.17.3"
-    }
+  "name": "mi-app",
+  "version": "1.0.0",
+  "description": "Aplicación con login, CSV y dashboard de logs usando Socket.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
   }
+}

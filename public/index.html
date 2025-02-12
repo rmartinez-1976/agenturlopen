@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login de Agente</title>
+  <!-- Incluir Bootstrap CSS desde CDN -->
+  <link
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-MCw98/..."
+    crossorigin="anonymous"
+  >
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .login-container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container login-container">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Inicia Sesión</h4>
+          </div>
+          <div class="card-body">
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="username">Usuario / Anexo</label>
+                <input type="text" id="username" class="form-control" placeholder="Ingresa tu usuario o anexo" required>
+              </div>
+              <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+          </div>
+          <div class="card-footer text-muted text-center">
+            &copy; 2025 Tu Empresa
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incluir librería de Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Incluir Bootstrap JS y dependencias (opcional para interactividad) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+          integrity="sha384-DfXd3gL..." 
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
+          integrity="sha384-9/reFTGAW83EW2RDuJ... " 
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+          integrity="sha384-B4gt1jrGC7Jh4AgBRJ..." 
+          crossorigin="anonymous"></script>
+  
+  <script>
+    const socket = io();
+
+    // Manejar el envío del formulario de login
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      socket.emit('login', { username, password });
+    });
+
+    // Responder a eventos de login
+    socket.on('loginSuccess', function(data) {
+      alert(data.message);
+      localStorage.setItem('username', document.getElementById('username').value);
+      localStorage.setItem('password', document.getElementById('password').value);
+      window.location.href = '/dashboard.html';
+    });
+    socket.on('loginFailure', function(data) {
+      alert(data.message);
+    });
+  </script>
+</body>
+</html>
+
+
+

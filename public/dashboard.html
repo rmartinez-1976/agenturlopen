@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard del Agente</title>
+  <!-- Incluir Bootstrap CSS desde CDN -->
+  <link
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-MCw98/..."
+    crossorigin="anonymous"
+  >
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .dashboard-container {
+      margin-top: 50px;
+    }
+    .log-entry {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container dashboard-container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="jumbotron text-center">
+          <h1 class="display-4">Dashboard del Agente</h1>
+          <p class="lead">Aquí se muestran los logs de las ejecuciones de comandos.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Logs de Ejecución
+          </div>
+          <ul class="list-group list-group-flush" id="logList">
+            <!-- Se agregarán los logs aquí -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incluir librería de Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Incluir Bootstrap JS y dependencias (opcional para interactividad) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+          integrity="sha384-DfXd3gL..." 
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
+          integrity="sha384-9/reFTGAW83EW2RDuJ... " 
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+          integrity="sha384-B4gt1jrGC7Jh4AgBRJ..." 
+          crossorigin="anonymous"></script>
+  
+  <script>
+    const socket = io();
+
+    // Recuperar credenciales almacenadas
+    const username = localStorage.getItem('username');
+    const password = localStorage.getItem('password');
+
+    if (!username || !password) {
+      alert("No se encontraron credenciales. Por favor, inicia sesión nuevamente.");
+      window.location.href = '/';
+    } else {
+      socket.emit('login', { username, password });
+    }
+
+    // Escuchar el evento para abrir la pestaña y registrar el log
+    socket.on('open-tab', function(data) {
+      // Abrir la URL en una nueva pestaña
+      window.open(data.url, '_blank');
+
+      // Agregar log en la lista
+      const logList = document.getElementById('logList');
+      const now = new Date();
+      const timestamp = now.toLocaleString();
+      const logItem = document.createElement('li');
+      logItem.className = 'list-group-item log-entry';
+      logItem.textContent = `${timestamp} - Se abrió la URL: ${data.url}`;
+      logList.prepend(logItem);
+    });
+
+    // Opcional: manejar login success o failure en el dashboard
+    socket.on('loginSuccess', function(data) {
+      console.log(data.message);
+    });
+    socket.on('loginFailure', function(data) {
+      alert(data.message);
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
